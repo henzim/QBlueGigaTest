@@ -1,7 +1,7 @@
-/** Based on "Bluegiga’s Bluetooth Smart Demo Application"
+/** Based on "BluegigaÂ’s Bluetooth Smart Demo Application"
   * NOTE: lacks ifdefs and only works under windows */
 //
-// Bluegiga’s Bluetooth Smart Demo Application
+// BluegigaÂ’s Bluetooth Smart Demo Application
 // Contact: support@bluegiga.com.
 //
 // This is free software distributed under the terms of the MIT license reproduced below.
@@ -26,6 +26,7 @@
 #include <stdio.h>
 
 #include "BluegigaUART.h"
+#include <logger.h>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -62,9 +63,10 @@ BluegigaUARTHandler::~BluegigaUARTHandler()
     close();
 }
 
-std::vector<int> BluegigaUARTHandler::list_devices() const
+std::list<int> BluegigaUARTHandler::list_devices() const
 {
-    std::vector< int > COMs;
+    LOG_FUNC_BEGIN
+    std::list< int > COMs;
     char name[]="Bluegiga Bluetooth Low Energy";
 
     BYTE* pbuf = NULL;
@@ -88,6 +90,7 @@ std::vector<int> BluegigaUARTHandler::list_devices() const
 
     if(hDevInfo==INVALID_HANDLE_VALUE)
     {
+        LOG_INFO(COMs.size())
         return COMs;
     }
     while(1)
@@ -100,6 +103,7 @@ std::vector<int> BluegigaUARTHandler::list_devices() const
         ))
         {
             SetupDiDestroyDeviceInfoList(hDevInfo);
+            LOG_INFO(COMs.size())
             return COMs;
         }
         reqSize = 0;
@@ -124,8 +128,10 @@ std::vector<int> BluegigaUARTHandler::list_devices() const
         }
         free(pbuf);
     }
+    LOG_INFO(COMs.size())
     return COMs;
 
+    LOG_FUNC_END
 }
 
 bool BluegigaUARTHandler::close_and_open(int _com)
@@ -171,7 +177,7 @@ bool BluegigaUARTHandler::feeling_lucky_open()
     uart_close();
 
     // list devices
-    std::vector< int > coms(list_devices());
+    std::list< int > coms(list_devices());
 
     if( coms.empty())
         return false;

@@ -6,7 +6,7 @@
 #ifndef BGUARTHandler_H
 #define BGUARTHandler_H
 
-#include <vector>
+#include <list>
 
 class BluegigaUARTHandler
 {
@@ -17,9 +17,9 @@ public:
     ~BluegigaUARTHandler();
 
     /** List COM port(s) with connected BLE(D) device
-      * returns a vector with ints i, corresponding to
+      * returns a list with ints i, corresponding to
       * the resp. COMi */
-    std::vector< int > list_devices() const;
+    std::list< int > list_devices() const;
 
     /** I am feeling lucky - lists devices and tries to open a connection to the first found*/
     bool feeling_lucky_open();
